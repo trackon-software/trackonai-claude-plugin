@@ -1,6 +1,6 @@
 ---
 name: trackonai-guide
-description: How to work in TrackonAI, the commodity trading and risk management (CTRM) system, through its connector. Covers finding contracts, shipments, positions, invoices and stock, running reports, creating contracts and sending them for approval, booking vendor bills, bank statement lines and manual ledger entries, loading opening balances, generating trade documents, and setting up a new company. Use whenever the user asks about or wants to change anything in TrackonAI, and before calling a TrackonAI tool.
+description: How to work in TrackonAI, the commodity trading and risk management (CTRM) system, through its connector. Covers finding contracts, shipments, positions, invoices and stock, running reports, creating contracts and sending them for approval, creating a shipment from a purchase and a sale line, adding a customer or vendor, booking vendor bills, bank statement lines and manual ledger entries, loading opening balances, generating trade documents, and setting up a new company. Use whenever the user asks about or wants to change anything in TrackonAI, and before calling a TrackonAI tool.
 ---
 
 # Working in TrackonAI
@@ -63,15 +63,16 @@ The full list, how the types hang together and the id conventions are in `refere
 | Task | Read first | In short |
 |---|---|---|
 | Create or change a contract, send it for approval | `references/contracts.md` | Draft first, check with `validate_contract_for_approval`, then status `Sent for Approval` |
-| Add a customer, vendor or other counterparty | `references/counterparties.md` | CONTACT, then ACCOUNT, then one SUB_ACCOUNT per branch |
-| Book a vendor's bill for a shipment cost, or send an invoice for approval | `references/invoices-and-bills.md` | `create_expense_invoice` from the shipment's open cost lines |
+| Ship quantity from a purchase line to a sale line or a warehouse | `references/shipments.md` | `check_shipment` writes nothing and reports everything, then `create_shipment` with a reference of its own |
+| Add a customer, vendor or other counterparty | `references/counterparties.md` | `check_counterparty` writes nothing and reports everything, then `create_counterparty` with a reference of its own |
+| Book a vendor's bill for a shipment cost, attach the vendor's file to it, or send an invoice for approval | `references/invoices-and-bills.md` | `upload_invoice_document` for the file, then `create_expense_invoice` from the shipment's open cost lines |
 | Book bank statement lines, payments, receipts, debit and credit notes, journal entries | `references/ledger-entries.md` | `save_direct_posting`, confirm, `activate_direct_posting` |
 | Load opening balances from a previous system | `references/opening-balances.md` | Import, activate, check the position, close |
 | Produce a contract, invoice, shipping instructions or another document | `references/documents.md` | Template, letterhead, full record, `generate_document` |
 | Run or explain a report | `references/reports.md` | List, parameters, run, poll, link |
 | Set up a new company or branch, or move from another system | `references/implementation.md` | Check what exists, then build in dependency order |
 
-If a guide cannot be opened, the short form above still holds, and each tool's own description carries its rules. One exception: for a vendor's bill, ignore the record by record sequence that the descriptions of `create_entity` and `fetch_counter_next` still give, and use `create_expense_invoice`.
+If a guide cannot be opened, the short form above still holds, and each tool's own description carries its rules.
 
 ## Done in the web application, not here
 
@@ -80,6 +81,7 @@ When a request falls here, say so plainly. Do not improvise a workaround.
 - Approving or rejecting a document, and choosing whether a workspace approves automatically or through a person.
 - Users, roles and who may use the connector. The workspace administrator manages them.
 - Goods invoices. They are raised from the shipment, which carries the invoice's lines. Here you can read one, check it and send it for approval.
+- A shipment between two branches. It needs a transfer price and a second warehouse, which the Linking screen collects.
 - Matching payments against invoices, and locking an accounting period.
-- Attaching a file to a record from a Claude app. The user attaches it on the record's page.
+- Attaching a file you cannot send: one over 1 MB, or one whose bytes you do not hold. The user attaches it on the record's page. A vendor's file that you can send goes with its expense invoice: see `references/invoices-and-bills.md`.
 - Bulk loads of master data. The web application has an Import wizard for administrators.
