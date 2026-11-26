@@ -35,7 +35,7 @@ Privacy: https://trackon.com/mcp-privacy.html
 
 ## Help
 
-- Setup and troubleshooting: https://trackon.com/mcp.html
+- Setup and troubleshooting: https://trackon.com/mcp-documentation.html
 - Support: support@trackonsoftware.com
 
 ## License
