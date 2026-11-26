@@ -4,5 +4,6 @@
   "version": "1.0.0",
   "description": "Work in TrackonAI, the commodity trading and risk management system, from a conversation: find contracts, shipments, positions and invoices, run reports, prepare contracts and bookings for approval, load opening balances and set up a new company. Brings the TrackonAI connector and a skill that teaches Claude the system's workflows and rules.",
   "author": { "name": "Trackon Software", "url": "https://trackon.com" },
+  "privacyPolicyUrl": "https://trackon.com/mcp-privacy.html",
   "license": "MIT"
 }
